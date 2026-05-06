@@ -42,4 +42,7 @@ public:
 	UPROPERTY(EditDefaultsOnly) // 블루프린트 설정에서만 수정 가능(인스턴스X)
 	bool isReady = false;
 	
+	
+	// 함수 사용
+	int32 Add(int32 a, int32 b);
 };
