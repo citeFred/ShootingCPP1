@@ -24,8 +24,22 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	// 기본 자료형 변수
+	UPROPERTY(EditAnywhere) // 블루프린트 설정창 OK / 레벨에 배치된 액터(인스턴스) OK
 	int32 number1 = 10;
+	
+	UPROPERTY(VisibleAnywhere) // 값을 볼수있지만 수정 불가 -> 코드에서만 수정할수있고, 에디터에서는 참고용
 	float number2 = 3.14f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) // 블루프린트 이벤트그래프에서 읽기쓰기모두가능
+	int32 number3 = 30;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) // 블루프린트 이벤트그래프에서 읽기전용
+	int32 number4 = 40;
+	
+	UPROPERTY(EditInstanceOnly) // 레벨에 배치된 액터 인스턴스에서만 수정 가능(블루프린트X)
 	FString name = TEXT("홍길동");
+	
+	UPROPERTY(EditDefaultsOnly) // 블루프린트 설정에서만 수정 가능(인스턴스X)
 	bool isReady = false;
+	
 };
