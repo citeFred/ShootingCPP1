@@ -3,6 +3,8 @@
 
 #include "EnemyActor.h"
 
+#include "EngineUtils.h"
+#include "PlayerPawn.h"
 #include "Components/BoxComponent.h"
 
 
@@ -34,11 +36,38 @@ void AEnemyActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// 1~100사이 임의 값 추첨
+	int32 drawResult = FMath::RandRange(1, 100);
+	if (drawResult <= traceRate)
+	{
+		// 추적을 위한 액터 탐색 반복 TActorIterator 활용
+		// for(TActorIterator<찾으려는 클래스> 위치포인터변수; 변수 이름; ++변수증감식) { 실행부 }
+		// 월드 공간에 APlayerPawn 클래스로 된 액터를 검색
+		for (TActorIterator<APlayerPawn> player(GetWorld()); player; ++player)
+		{
+			// 찾은 액터 이름이 BP_PlayerPawn이라면,
+			if (player->GetName().Contains(TEXT("BP_PlayerPawn")))
+			{
+				// 찾은 플레이어 위치 - 에너미 자선의 위치 = dir 방향 변수에 할당(그 방향으로 가기 위해서)
+				dir = player->GetActorLocation() - GetActorLocation();
+				dir.Normalize(); 
+			}
+		}
+	}
+	else
+	{
+		// 직진
+		dir = GetActorForwardVector();
+	}
 }
 
 // Called every frame
 void AEnemyActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	// 적이 정해진 방향으로 이동
+	FVector newLocation = GetActorLocation() + dir * moveSpeed * DeltaTime;
+	SetActorLocation(newLocation);
 }
 
