@@ -3,8 +3,10 @@
 
 #include "ShootingGameModeBase.h"
 #include "MainWidget.h"
+#include "MenuWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
+#include "Kismet/GameplayStatics.h"
 
 void AShootingGameModeBase::BeginPlay()
 {
@@ -33,4 +35,23 @@ void AShootingGameModeBase::PrintScore()
 	{
 		mainUI->scoreData->SetText(FText::AsNumber(currentScore));
 	} 
+}
+
+// 게임 오버 메뉴 위젯을 출력하는 함수
+void AShootingGameModeBase::ShowMenu()
+{
+	if (menuWidget != nullptr)
+	{
+		// 메뉴 위젯 생성
+		menuUI = CreateWidget<UMenuWidget>(GetWorld(), menuWidget);
+		
+		if (menuUI != nullptr)
+		{
+			menuUI->AddToViewport();
+			// 메뉴 등장 시, 게임 일시 정지
+			UGameplayStatics::SetGamePaused(GetWorld(), true);
+			// 컨트롤러에서 마우스 커서 보이게 하기
+			GetWorld()->GetFirstPlayerController()->SetShowMouseCursor(true);
+		}
+	}
 }
