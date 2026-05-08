@@ -38,6 +38,14 @@ public:
 	// 플레이어 추적 확률 (0~100)
 	UPROPERTY(EditAnywhere)
 	int32 traceRate = 50;
+
+	// 최대 기울기 각도
+	UPROPERTY(EditAnywhere, Category = "EnemySettings")
+	float maxTiltAngle = 20.f;
+
+	// 기울기 보간 속도
+	UPROPERTY(EditAnywhere, Category = "EnemySettings")
+	float tiltSpeed = 5.f;
 	
 	// 충돌 이벤트 함수 - OnComponentBeginOverlap 델리게이트에 등록할 함수
 	UFUNCTION()
