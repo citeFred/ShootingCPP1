@@ -54,7 +54,7 @@ public:
 	
 	// 최대 기울기 각도
 	UPROPERTY(EditAnywhere, Category = "PlayerSettings")
-	float maxTiltAngle = 30.f;
+	float maxTiltAngle = 50.f;
 
 	// 기울기 보간 속도
 	UPROPERTY(EditAnywhere, Category = "PlayerSettings")
@@ -80,6 +80,9 @@ private:
 	float h;
 	float v;
 	
+	// 에디터에서 설정된 meshComp 초기 상대 회전값 (틸트의 기준점)
+	FRotator baseMeshRot;
+
 	// 입력 이벤트 발동 시 실행 될 함수
 	void OnInputHorizontal(const struct FInputActionValue& value);
 	void OnInputVertical(const struct FInputActionValue& value);

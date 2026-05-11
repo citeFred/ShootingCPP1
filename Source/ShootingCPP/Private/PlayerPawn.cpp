@@ -54,7 +54,13 @@ APlayerPawn::APlayerPawn()
 void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// 에디터에서 설정한 meshComp 초기 회전값을 캐싱 (틸트가 매 프레임 덮어쓰는 문제 방지)
+	if (meshComp)
+	{
+		baseMeshRot = meshComp->GetRelativeRotation();
+	}
+
 	APlayerController* pc = GetWorld()->GetFirstPlayerController();
 	if (pc != nullptr)
 	{
@@ -83,9 +89,9 @@ void APlayerPawn::Tick(float DeltaTime)
 	SetActorLocation(GetActorLocation() + FVector(0, 0, vector.Z), true);
 
 	// 틸팅 로직 추가
-	// 목표 회전값 계산 (Roll축 회전)
+	// 목표 회전값 계산 (에디터 초기 회전 + 입력 기반 틸트 오프셋)
 	float targetRoll = h * -maxTiltAngle;
-	FRotator targetRot = FRotator(0, targetRoll, 0);
+	FRotator targetRot = baseMeshRot + FRotator(0, targetRoll, 0);
 
 	// 현재 회전값에서 목표 회전값으로 보간
 	FRotator currentRot = meshComp->GetRelativeRotation();
