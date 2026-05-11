@@ -4,8 +4,11 @@
 #include "PlayerPawn.h"
 
 #include "Bullet.h"
+#include "EnemyActor.h"
+#include "EngineUtils.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -120,6 +123,32 @@ void APlayerPawn::Fire()
 	UGameplayStatics::PlaySound2D(GetWorld(), fireSound);
 }
 
+void APlayerPawn::Special()
+{
+	// 사용 가능 횟수가 남아있지 않으면 무시
+	if (specialCount <= 0)
+	{
+		return;
+	}
+	specialCount--;
+
+	// 필살기 효과음 재생
+	if (specialSound != nullptr)
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), specialSound);
+	}
+
+	// 월드 상의 모든 적 액터를 순회하며 이펙트 스폰 후 제거
+	for (TActorIterator<AEnemyActor> enemy(GetWorld()); enemy; ++enemy)
+	{
+		if (specialFX != nullptr)
+		{
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), specialFX, enemy->GetActorLocation());
+		}
+		enemy->Destroy();
+	}
+}
+
 // Called to bind functionality to input
 void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -135,6 +164,7 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		eic->BindAction(iaVertical, ETriggerEvent::Triggered, this, &APlayerPawn::OnInputVertical);
 		eic->BindAction(iaVertical, ETriggerEvent::Completed, this, &APlayerPawn::OnInputVertical);
 		eic->BindAction(iaFire, ETriggerEvent::Started, this, &APlayerPawn::Fire);
+		eic->BindAction(iaSpecial, ETriggerEvent::Started, this, &APlayerPawn::Special);
 	}
 }
 

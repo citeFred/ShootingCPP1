@@ -26,10 +26,10 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	// // 박스 충돌체 컴포넌트
+	// 박스 충돌체 컴포넌트
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* boxComp;
-	//
+	
 	// 스태틱 메시 컴포넌트
 	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* meshComp;
@@ -47,7 +47,10 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	class UInputAction* iaFire;
-	
+
+	UPROPERTY(EditAnywhere)
+	class UInputAction* iaSpecial;
+
 	// 이동 속도 변수
 	UPROPERTY(EditAnywhere, Category = "PlayerSettings")
 	float moveSpeed = 500.f;
@@ -74,7 +77,19 @@ public:
 	// 발사 효과음
 	UPROPERTY(EditAnywhere)
 	class USoundBase* fireSound;
-	
+
+	// 필살기 나이아가라 이펙트
+	UPROPERTY(EditAnywhere)
+	class UNiagaraSystem* specialFX;
+
+	// 필살기 효과음
+	UPROPERTY(EditAnywhere)
+	class USoundBase* specialSound;
+
+	// 필살기 사용 가능 횟수
+	UPROPERTY(EditAnywhere)
+	int32 specialCount = 5;
+
 private:
 	// 사용자 키 입력값을 받을 변수
 	float h;
@@ -87,4 +102,5 @@ private:
 	void OnInputHorizontal(const struct FInputActionValue& value);
 	void OnInputVertical(const struct FInputActionValue& value);
 	void Fire();
+	void Special();
 };
