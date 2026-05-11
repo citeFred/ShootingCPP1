@@ -1,0 +1,15 @@
+{
+  "WorkspaceID": "dv.ws.fe2c68f1-491b-40e1-a8bf-aab18ddf895a",
+  "RepoID": "dv.repo.ed5f636c-212c-4521-80fb-780c50cc1c56",
+  "Path": "C:\\Users\\user\\Documents\\Unreal Projects\\ShootingCPP",
+  "AccountID": "Google_101302559293628481792",
+  "BranchID": "dv.branch.3",
+  "BranchName": "modify",
+  "CommitID": "dv.commit.7",
+  "Paused": false,
+  "ShouldDownload": false,
+  "RepoName": "ShootingCPP",
+  "ReadOnly": false,
+  "DigestMethod": "sha1",
+  "OrganizationTier": "UNKNOWN"
+}
