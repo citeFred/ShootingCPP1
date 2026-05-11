@@ -99,5 +99,14 @@ void AEnemyActor::Tick(float DeltaTime)
 	// 적이 정해진 방향으로 이동
 	FVector newLocation = GetActorLocation() + dir * moveSpeed * DeltaTime;
 	SetActorLocation(newLocation);
+
+	// 방향에 따른 Z축 회전(Yaw) 로직 추가
+	// dir.Y 성분(좌우 방향)에 따라 Z축 회전값 결정
+	float targetYaw = dir.Y * maxTiltAngle;
+	FRotator targetRot = FRotator(0, targetYaw, 0);
+
+	// 현재 회전값에서 목표 회전값으로 보간
+	FRotator currentRot = meshComp->GetRelativeRotation();
+	meshComp->SetRelativeRotation(FMath::RInterpTo(currentRot, targetRot, DeltaTime, tiltSpeed));
 }
 

@@ -49,8 +49,16 @@ public:
 	class UInputAction* iaFire;
 	
 	// 이동 속도 변수
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "PlayerSettings")
 	float moveSpeed = 500.f;
+	
+	// 최대 기울기 각도
+	UPROPERTY(EditAnywhere, Category = "PlayerSettings")
+	float maxTiltAngle = 30.f;
+
+	// 기울기 보간 속도
+	UPROPERTY(EditAnywhere, Category = "PlayerSettings")
+	float tiltSpeed = 5.f;
 	
 	// 총알 발사 위치(총구)
 	// UArrowComponent는 직선상 경로를 활용하는 클래스

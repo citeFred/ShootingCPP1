@@ -81,6 +81,15 @@ void APlayerPawn::Tick(float DeltaTime)
 	FVector vector = dir * moveSpeed * DeltaTime;
 	SetActorLocation(GetActorLocation() + FVector(0, vector.Y, 0), true);
 	SetActorLocation(GetActorLocation() + FVector(0, 0, vector.Z), true);
+
+	// 틸팅 로직 추가
+	// 목표 회전값 계산 (Roll축 회전)
+	float targetRoll = h * -maxTiltAngle;
+	FRotator targetRot = FRotator(0, targetRoll, 0);
+
+	// 현재 회전값에서 목표 회전값으로 보간
+	FRotator currentRot = meshComp->GetRelativeRotation();
+	meshComp->SetRelativeRotation(FMath::RInterpTo(currentRot, targetRot, DeltaTime, tiltSpeed));
 }
 
 // 사용자가 키를 누를때 실행되며 h,v 변수를 재할당하는 함수
