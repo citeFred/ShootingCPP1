@@ -18,21 +18,20 @@ APlayerPawn::APlayerPawn()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	// 박스 콜리전 컴포넌트 생성
-	// (제거) boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("My Box Component"));
+	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("My Box Component"));
 	
 	// 생성한 박스 콜리전 컴포넌트를 최상단 컴포넌트로 설정
-	// (제거) SetRootComponent(boxComp);
+	SetRootComponent(boxComp);
 	
 	// 스태틱메시 컴포넌트 생성
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("My Mesh Component"));
 	
 	// 박스 콜리전 자식으로 스태틱 메시 컴포넌트 설정
-	SetRootComponent(meshComp);
+	meshComp->SetupAttachment(boxComp);
 	
 	// 박스 콜라이더 크기를 50x50x50 설정
-	// (제거)
-	// FVector boxSize = FVector(50.f, 50.f, 50.f);
-	// boxComp->SetBoxExtent(boxSize);
+	FVector boxSize = FVector(50.f, 50.f, 50.f);
+	boxComp->SetBoxExtent(boxSize);
 	
 	// 총구 컴포넌트 설정
 	firePosition = CreateDefaultSubobject<UArrowComponent>(TEXT("Fire Component"));
@@ -45,7 +44,10 @@ APlayerPawn::APlayerPawn()
 	// boxComp->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	// boxComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Ignore); // Enemy 채널에 ignore
 	// 아래 처럼 에디터에서 생성할 프리셋 이름을 컴포넌트에 세팅해준다.
-	meshComp->SetCollisionProfileName(TEXT("Player"));
+	// Root(boxComp)에 Player 프리셋 부여 → sweep 충돌 및 채널 응답이 Root 기준으로 작동
+	boxComp->SetCollisionProfileName(TEXT("Player"));
+	// 자식 meshComp는 시각용으로만 두고 충돌 비활성화 (중복 충돌 방지)
+	meshComp->SetCollisionProfileName(TEXT("NoCollision"));
 }
 
 // Called when the game starts or when spawned
